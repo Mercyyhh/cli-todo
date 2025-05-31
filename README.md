@@ -34,7 +34,7 @@ This can be used as is but you will have to run it like, `python3 main.py add bu
 in order to run it like a normal terminal command you need to:
 
 1. copy the json file from the json directory to anywhere you
-want and change the `json_path` variable in `main.py` to the json file directory.
+want and change the `json_path` variable in `main.py` to the json file path.
 
 
 2. Rename the python file to what you want the command prefix to be, i will choose `todo` for this example. and make sure you remove the file extention. **todo ~~.py~~**
