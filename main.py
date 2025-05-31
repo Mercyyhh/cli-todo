@@ -14,8 +14,10 @@ parser = argparse.ArgumentParser(
 
 # [DEFINE COMMANDS, ARGUMENTS, FLAGS]
 
-parser.add_argument("action", choices=["add", "remove", "list"], help="Decide what action you want to do!")
+parser.add_argument("action", choices=["add", "remove", "list", "complete"], help="Decide what action you want to do!")
 parser.add_argument("task", nargs="*", help="Task description or number") # whatever that comes after the action command will be passed on to tasks command
+parser.add_argument("-r", "--removed",action="store_true", help="List removed tasks")
+parser.add_argument("-c", "--completed",action="store_true", help="List completed tasks")
 
 # [TEMP LIST & DICTIONARY]
 
@@ -34,20 +36,20 @@ def add_task(json_file, task_dict, user_args):
     with open(json_file, "w") as f:
         json.dump(existing_tasks, f, indent=2)
 
-def list_tasks(json_file):
+def list_tasks(json_file, task_catagory):
     with open(json_file, "r") as f:
         tasks = json.load(f)
     
-    for i, item in enumerate(tasks["tasks"], start=1):
+    for i, item in enumerate(tasks[task_catagory], start=1):
         print(f"{i}. {item["task"]}")
 
-def remove_task(json_file, task_index):
+def move_task(json_file, task_index, dest_list): # move task will delete and complete task as it all is just moving the task to another list
     with open(json_file, "r") as f:
         tasks = json.load(f)
 
     task_index -=1
     task_to_dlt = tasks["tasks"].pop(task_index)
-    tasks["deleted"].append(task_to_dlt)
+    tasks[dest_list].append(task_to_dlt)
 
     with open(json_file, "w") as f:
         json.dump(tasks, f, indent=2)
@@ -65,19 +67,37 @@ if args.action == "add":
         print("<<< Task added successfully!!")
 
 if args.action == "list":
-    if args.task:
-        print("'list' Command takes no argument!")
+    active_list = None
+    if args.removed:
+        active_list = "deleted"
+    elif args.completed:
+        active_list = "completed"
     else:
-        list_tasks(json_path)
+        active_list = "tasks"
+        
+    list_tasks(json_path, active_list)
 
 if args.action == "remove":     
     if not args.task:           
         print("'remove' Command takes an argument!")
     else:
         try:
-            remove_index = int(args.task[0])
-            remove_task(json_path, remove_index)
+            move_index = int(args.task[0])
+            move_task(json_path, move_index, "deleted")
         except ValueError:
             print("'remove' Command takes an int argument!")    
         except IndexError:
-            print(f"Task {args.task} does not exist")   
+            print(f"Task {args.task} does not exist")
+
+if args.action == "complete":
+    if not args.task:
+        print("'complete' Command takes an argument!")
+    else:
+        try:
+            move_index = int(args.task[0])
+            move_task(json_path, move_index, "completed")
+        except ValueError:
+            print("'complete' Command takes an int argument!")    
+        except IndexError:
+            print(f"Task {args.task} does not exist")
+    
