@@ -33,16 +33,17 @@ This can be used as is but you will have to run it like, `python3 main.py add bu
 
 in order to run it like a normal terminal command you need to:
 
-1. Rename the python file to what you want the command prefix to be, i will choose `todo` for this example. and make sure you remove the file extention. **todo ~~.py~~**
-2. Make the file executable with `chmod`.
+1. copy the json file from the json directory to anywhere you
+want and change the `json_path` variable in `main.py` to the json file directory.
+
+
+2. Rename the python file to what you want the command prefix to be, i will choose `todo` for this example. and make sure you remove the file extention. **todo ~~.py~~**
+
+3. Make the file executable with `chmod`.
     - `chmod +x todo`
-3. Move the file to `~/.local/bin/`.
+4. Move the file to `~/.local/bin/`.
 
-4. add the path to bash/zsh if it's not already there.
-
-5. copy the json file from the json directory to anywhere you
-want and change the `json_path` variable in `main.py` to the jsoon file directory.
-
+5. add the path to bash/zsh if it's not already there. (im not gonna explain, find out yourself)
 
 Now you should be able to run it in the terminal no matter which directory you are in by running:
 
