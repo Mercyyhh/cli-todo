@@ -4,7 +4,7 @@ import argparse
 import json
 import copy
 
-json_path = "json/trial.json"
+json_path = "json/tasks.json"
 
 parser = argparse.ArgumentParser(
     prog="ToDo CLI App",
@@ -20,19 +20,17 @@ parser.add_argument("task", nargs="*", help="Task description or number") # what
 # [TEMP LIST & DICTIONARY]
 
 task_details = {
-    "task": None,
-    "completed": False  # Default for incomplete tasks
+    "task": None
 }
 
 # [TODO LIST FUNCTIONS]
 
-def add_task(json_file, task_dict, user_args): 
+def add_task(json_file, task_dict, user_args):
+    task_dict["task"] = user_args 
     with open(json_file, "r") as f:
         existing_tasks = json.load(f)
     
-    task_dict["task"] = user_args
-    existing_tasks.append(task_dict)
-
+    existing_tasks["tasks"].append(task_dict)
     with open(json_file, "w") as f:
         json.dump(existing_tasks, f, indent=2)
 
@@ -40,9 +38,19 @@ def list_tasks(json_file):
     with open(json_file, "r") as f:
         tasks = json.load(f)
     
-    for i, item in enumerate(tasks, start=1):
-        status = "- COMPLETED" if item["completed"] else " "
-        print(f"{i}. {item["task"]} {status}")
+    for i, item in enumerate(tasks["tasks"], start=1):
+        print(f"{i}. {item["task"]}")
+
+def remove_task(json_file, task_index):
+    with open(json_file, "r") as f:
+        tasks = json.load(f)
+
+    task_index -=1
+    task_to_dlt = tasks["tasks"].pop(task_index)
+    tasks["deleted"].append(task_to_dlt)
+
+    with open(json_file, "w") as f:
+        json.dump(tasks, f, indent=2)
 
 # [ARGPARSE CONDITIONS]
 
@@ -62,13 +70,14 @@ if args.action == "list":
     else:
         list_tasks(json_path)
 
-if args.action == "remove":     # Remove function
-    if not args.task:           # If no task index is provided after command "remove"
+if args.action == "remove":     
+    if not args.task:           
         print("'remove' Command takes an argument!")
     else:
         try:
-            todo_functions.remove_complete_task(removed_tasks, tasks, args.task)
+            remove_index = int(args.task[0])
+            remove_task(json_path, remove_index)
         except ValueError:
-            print("'remove' Command takes an int argument!")    # If user passes a string instead of an int
+            print("'remove' Command takes an int argument!")    
         except IndexError:
-            print(f"Task {args.task} does not exist")   # If user passes in an index that doesn't exist
+            print(f"Task {args.task} does not exist")   

@@ -1,0 +1,19 @@
+{
+  "tasks": [
+    {
+      "task": "buy milk"
+    }
+  ],
+  "completed": [],
+  "deleted": [
+    {
+      "task": "complete project"
+    },
+    {
+      "task": "hello world"
+    },
+    {
+      "task": "this task is only here to be removed"
+    }
+  ]
+}
