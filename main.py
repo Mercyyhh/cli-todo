@@ -2,7 +2,6 @@
 
 import argparse
 import json
-import copy
 
 json_path = "json/tasks.json"
 
