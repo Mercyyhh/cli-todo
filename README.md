@@ -38,6 +38,14 @@ in order to run it like a normal terminal command you need to:
     - `chmod +x todo`
 3. Move the file to `~/.local/bin/`.
 
+4. add the path to bash/zsh if it's not already there.
+
+5. copy the json file from the json directory to anywhere you
+want and change the `json_path` variable in `main.py` to the jsoon file directory.
+
+
 Now you should be able to run it in the terminal no matter which directory you are in by running:
 
 `todo add buy milk`
+
+
